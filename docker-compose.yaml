@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mongodb-service:
+    image: mongo
+    container_name: mongodb-service
+    ports:
+      - 27017:27017
+    networks:
+      - mongo-network
+    volumes:
+      - mongodb-vomlume:/mongodb 
+  backend:
+    image: houdaibr/backend
+    container_name: backend
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb-service
+    networks:
+      - mongo-network
+  frontend:
+    image: houdaibr/frontend
+    container_name: frontend
+    ports:
+      - 3000:80
+    networks:
+      - mongo-network
+    depends_on:
+      - backend
+volumes:
+  mongodb-vomlume:
+networks:
+  mongo-network:
+   driver: bridge
